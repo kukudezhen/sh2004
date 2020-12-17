@@ -36,8 +36,4 @@ public class UserController {
         return "index";
     }
 
-    @RequestMapping("crmVo")
-    void crmVo(){
-        return;
-    }
 }
