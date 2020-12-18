@@ -25,7 +25,9 @@ public class userServiceImpl implements UserService {
             String ip=user.getAllowIps();
             user.setAllowIps(null);
 
-        user = userMapper.selectOne(user);
+         user = userMapper.selectOne(user);
+
+        System.out.println(user);
         //判断用户名密码是否正确
         if (user == null) {
             throw new CrmException(CrmExceptionEnum.LOGIN_ACCOUNT_EXCEPTION);
@@ -38,6 +40,7 @@ public class userServiceImpl implements UserService {
             if ("0".equals(user.getLockState())) {
                 throw new CrmException(CrmExceptionEnum.LOGIN_LOCK_EXCEPTION);
             }
+            //判断当前登录的主机是否可用
             if (!user.getAllowIps().contains(ip)) {
                    throw new CrmException(CrmExceptionEnum.LOGIN_IP_EXCEPTION);
             }

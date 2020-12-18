@@ -12,6 +12,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 @Controller
 public class UserController {
@@ -20,20 +21,26 @@ public class UserController {
 
     @RequestMapping("/login")
     String login(User user, Model model, HttpServletRequest request) {
-             //获取客户端的ip地址
-             user.setAllowIps(request.getRemoteAddr());
+        //获取客户端的ip地址
+        user.setAllowIps(request.getRemoteAddr());
         try {
             user = userService.login(user);
             //将用户登录信息写进session中
-         request.getSession().setAttribute(CrmConstants.LOGIN_USER,user);
-        }catch (CrmException e){
-            model.addAttribute("mess",e.getMessage());
+            request.getSession().setAttribute(CrmConstants.LOGIN_USER, user);
+        } catch (CrmException e) {
+            model.addAttribute("mess", e.getMessage());
             //回写用户名
-            model.addAttribute("LoginAct",user.getLoginAct());
+            model.addAttribute("LoginAct", user.getLoginAct());
             return "../../login";
         }
 
         return "index";
+    }
+       //退出登录
+    @RequestMapping("/loginOut")
+    public String loginOut(HttpSession session) {
+        session.removeAttribute(CrmConstants.LOGIN_USER);
+        return "../../login";
     }
 
 }
